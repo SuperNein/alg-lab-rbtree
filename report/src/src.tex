@@ -1,0 +1,117 @@
+\section{Описание}
+Для реализации словаря использовано красно-чёрное дерево (\texttt{alg::RBTree}), гарантирующее логарифмическую сложность операций поиска, вставки и удаления $O(\log n)$ в худшем случае за счёт поддержания инвариантов раскраски узлов \cite{Kormen}.
+
+Особенности реализации:
+\begin{itemize}
+    \item Для упрощения граничных проверок при поворотах и балансировке используется единый статический фиктивный лист \texttt{nil\_} чёрного цвета.
+    \item Ключи приводятся к нижнему регистру на этапе разбора ввода; структура \texttt{Node} хранит строку ключа, 64-битное значение, цвет (\texttt{uint8\_t}) и три указателя (\texttt{left}, \texttt{right}, \texttt{parent}).
+    \item Бинарный формат команд \texttt{Save}/\texttt{Load} включает заголовок (сигнатура \texttt{0x52424454}, версия формата, число записей \texttt{uint64\_t}) и последовательность записей вида \texttt{[uint16\_t len][key bytes][uint64\_t value]}.
+    \item Атомарность \texttt{Load} обеспечивается загрузкой данных во временное дерево \texttt{temp} с проверкой ключей и отсутствия лишних байт в конце файла; подмена рабочего словаря выполняется через \texttt{swap(tree, temp)} только после успешного чтения.
+\end{itemize}
+
+\section{Исходный код}
+Ниже приведено описание класса \texttt{RBTree} из заголовочного файла \texttt{include/rb\_tree.hpp} (итоговая версия \texttt{v2}) и сводная таблица основных функций проекта.
+
+\begin{lstlisting}[language=C++]
+namespace alg {
+
+class RBTree {
+public:
+    RBTree() noexcept = default;
+    ~RBTree();
+
+    RBTree(const RBTree&) = delete;
+    RBTree& operator=(const RBTree&) = delete;
+
+    bool insert(const std::string& key, uint64_t value);
+    bool insert(std::string&& key, uint64_t value);
+    bool remove(const std::string& key);
+    std::optional<uint64_t> find(const std::string& key) const;
+    void clear() noexcept;
+
+    friend void swap(RBTree& lhs, RBTree& rhs) noexcept;
+    friend void save(const RBTree& tree, const std::string& file_path);
+    friend void load(RBTree& tree, const std::string& file_path);
+
+private:
+    enum class Color : uint8_t { red = 0, black = 1 };
+
+    struct Node {
+        std::string key;
+        uint64_t value = 0;
+        Color color = Color::red;
+        Node* left = nullptr;
+        Node* right = nullptr;
+        Node* parent = nullptr;
+
+        Node() = default;
+        Node(std::string k, uint64_t v, Color c = Color::red) noexcept;
+    };
+
+    static Node nil_;
+    Node* root_ = &nil_;
+    std::size_t size_ = 0;
+};
+
+} // namespace alg
+\end{lstlisting}
+
+\begin{longtable}{|p{7.2cm}|p{7.8cm}|}
+\hline
+\rowcolor{lightgray}
+\multicolumn{2}{|c|}{\texttt{src/rb\_tree.cpp}} \\
+\hline
+\texttt{find\_node(const std::string\&)} & Спуск по дереву с одиночным вызовом \texttt{key.compare(current->key)}. \\
+\hline
+\texttt{find\_insert\_pos(...)}, \texttt{attach\_node(...)} & Поиск позиции вставки с запоминанием направления и прикрепление нового узла. \\
+\hline
+\texttt{insert(const std::string\&, uint64\_t)}, \texttt{insert(std::string\&\&, uint64\_t)} & Вставка пары ключ-значение (с копированием либо перемещением строки ключа) и вызовом \texttt{insert\_fixup}. \\
+\hline
+\texttt{remove(const std::string\&)} & Удаление узла с перестановкой через \texttt{transplant} и восстановлением баланса в \texttt{delete\_fixup}. \\
+\hline
+\texttt{left\_rotate}, \texttt{right\_rotate} & Левый и правый повороты поддерева за $O(1)$. \\
+\hline
+\rowcolor{lightgray}
+\multicolumn{2}{|c|}{\texttt{src/rb\_tree\_io.cpp}} \\
+\hline
+\texttt{save(const RBTree\&, const std::string\&)} & Итеративный обход дерева на стеке и запись заголовка с записями в бинарный файл. \\
+\hline
+\texttt{load(RBTree\&, const std::string\&)} & Валидация заголовка, чтение записей во временное дерево с \texttt{std::move(key)} и обмен через \texttt{swap}. \\
+\hline
+\rowcolor{lightgray}
+\multicolumn{2}{|c|}{\texttt{src/main.cpp}} \\
+\hline
+\texttt{main()} & Отключение синхронизации \texttt{stdio}, разбор команд, нормализация регистра, перехват исключений и вывод \texttt{ERROR: ...}. \\
+\hline
+\end{longtable}
+
+\pagebreak
+
+\section{Консоль}
+Сборка релизной версии с помощью CMake (компилятор \texttt{g++}, стандарт C++23, флаги \texttt{-Wall -Wextra -Wpedantic -Werror}) и проверка базовых операций на тесте \texttt{smoke.in}:
+
+\begin{alltt}
+$ cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release
+$ cmake --build build-release -j
+[ 60%] Built target rb_tree
+[100%] Built target dict
+$ cat tests/smoke.in
++ Hello 42
++ hello 100
+HELLO
+! Save /tmp/dict_smoke.bin
+- HeLLo
+hello
+! Load /tmp/dict_smoke.bin
+hello
+$ ./build-release/dict < tests/smoke.in
+OK
+Exist
+OK: 42
+OK
+OK
+NoSuchWord
+OK
+OK: 42
+\end{alltt}
+\pagebreak

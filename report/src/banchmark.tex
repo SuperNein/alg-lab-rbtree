@@ -1,0 +1,71 @@
+\section{Исследование производительности и памяти}
+
+\subsection{Дневник выполнения работы}
+
+\begin{longtable}{|p{2.0cm}|p{3.6cm}|p{3.6cm}|p{5.0cm}|}
+\hline
+\rowcolor{lightgray}
+\textbf{Дата} & \textbf{Этап} & \textbf{Средства} & \textbf{Результат} \\
+\hline
+26.11.2026 & Базовая реализация \texttt{v1} и проверка корректности & \texttt{g++} (C++23), CMake, \texttt{smoke.in} & Реализована библиотека \texttt{rb\_tree} и CLI-словарь; базовые тесты пройдены. \\
+\hline
+27.11.2026 & Подготовка стенда профилирования & Python (\texttt{gen\_bench.py}), Bash (\texttt{run\_profile.sh}) & Сгенерированы 4 тестовых набора по 500 тыс. команд (250 тыс. записей для I/O). \\
+\hline
+27.11.2026 & Профилирование базовой версии \texttt{v1} & \texttt{/usr/bin/time -v}, \texttt{gprof}, \texttt{Valgrind} (\texttt{Memcheck}, \texttt{Massif}) & Подтверждено отсутствие утечек; выявлены лишние сравнения строк и копирования \texttt{std::string}. \\
+\hline
+27.11.2026 & Оптимизация кода (\texttt{v2}) и повторные замеры & \texttt{g++} (\texttt{-O3}, \texttt{-pg -g}), \texttt{gprof}, \texttt{Valgrind}, \texttt{/usr/bin/time -v} & Внедрены \texttt{std::string::compare} и \texttt{insert(std::string\&\&)}; сняты контрольные метрики. \\
+\hline
+\end{longtable}
+
+\subsection{Методика тестирования и анализ базовой версии (\texttt{v1})}
+Для воспроизводимых замеров подготовлены 4 сценария:
+\begin{itemize}
+    \item \texttt{01\_random} --- 500\,000 случайных операций (\texttt{+}, \texttt{-}, поиск) и 3 пары \texttt{Save}/\texttt{Load};
+    \item \texttt{02\_sorted} --- 250\,000 вставок в отсортированном порядке и 250\,000 поисков (проверка балансировки);
+    \item \texttt{03\_long\_keys} --- 500\,000 операций на ключах длиной 220--256 символов с общим префиксом 180 символов;
+    \item \texttt{04\_io\_heavy} --- 250\,000 вставок и 5 циклов \texttt{Save}/\texttt{Load} (суммарно 1\,500\,000 вызовов \texttt{insert}).
+\end{itemize}
+
+\textbf{Анализ памяти (\texttt{Valgrind Memcheck} и \texttt{Massif}):} на первых 20\,000 командах \texttt{01\_random} \texttt{Memcheck} зафиксировал \texttt{0 errors} и \texttt{0 bytes} в категориях \texttt{definitely/indirectly/possibly lost} \cite{Valgrind}. Оставшиеся \texttt{122\,880 B} в 6 блоках (\texttt{still reachable}) относятся к внутренним буферам \texttt{libstdc++}/\texttt{glibc} и утечкой не являются. По данным \texttt{Massif} пиковое потребление кучи составило \texttt{17.27 MiB} (\texttt{18.11 МБ}); на графике выделяются три кратковременных удвоения памяти в моменты \texttt{! Load}, обусловленные требованием атомарности (построение временного дерева до \texttt{swap}).
+
+\textbf{Профилирование CPU (\texttt{gprof}) \cite{Gprof}:} на длинных ключах (\texttt{03\_long\_keys}) основную долю времени заняли \texttt{find\_node} (40.0\%, 0.12~с) и \texttt{insert} (26.7\%, 0.08~с); на отсортированном наборе (\texttt{02\_sorted}) --- \texttt{find\_node} (69.2\%, 360~нс/вызов); на \texttt{04\_io\_heavy} функция \texttt{load} заняла 63.0\% времени (35.30~мс/вызов) из-за 1.25~млн вызовов \texttt{insert}.
+
+\subsection{Выводы о найденных недочётах}
+\begin{enumerate}
+    \item \textbf{Избыточные сравнения строк.} В \texttt{find\_node} и \texttt{insert} на каждом узле выполнялись два отдельных сравнения (\texttt{==} и \texttt{<}), а при прикреплении нового узла к родителю --- третье (\texttt{node->key < parent->key}). На длинных ключах с общим префиксом это приводило к повторному просмотру одинаковых символов.
+    \item \textbf{Лишние копирования \texttt{std::string}.} Метод \texttt{insert} принимал ключ только по \texttt{const std::string\&}. При добавлении слов в \texttt{main} и десериализации в \texttt{load} для строк длиннее буфера SSO (> 15 байт) выполнялись лишняя аллокация и копирование буфера \cite{CppRef}.
+\end{enumerate}
+
+В версии \texttt{v2} оба недочёта устранены: сравнения заменены на единый вызов \texttt{key.compare(current->key)} с запоминанием стороны вставки (\texttt{insert\_left}), а также добавлена перегрузка \texttt{insert(std::string\&\&, uint64\_t)} с передачей ключа через \texttt{std::move}.
+
+\subsection{Сравнение версий \texttt{v1} и \texttt{v2}}
+Замеры проводились на идентичных входных файлах в среде WSL (директория \texttt{/mnt/d/}), поэтому основным показателем вычислительной нагрузки является процессорное время \texttt{User time} (время \texttt{Wall clock} дополнительно включает колебания файловой системы хоста).
+
+\begin{longtable}{|p{4.6cm}|p{2.9cm}|p{2.9cm}|p{3.8cm}|}
+\hline
+\rowcolor{lightgray}
+\textbf{Метрика / тест} & \textbf{\texttt{v1} (до)} & \textbf{\texttt{v2} (после)} & \textbf{Изменение} \\
+\hline
+\texttt{01\_random}: User time / RSS & 0.36 с / 19.0 МБ & 0.34 с / 20.0 МБ & $-5.6\%$ по CPU \\
+\hline
+\texttt{02\_sorted}: User time / RSS & 0.19 с / 25.5 МБ & 0.19 с / 27.1 МБ & без изменений по CPU \\
+\hline
+\texttt{03\_long\_keys}: User / Wall / RSS & 0.71 с / 3.34 с / 36.8 МБ & 0.73 с / 3.16 с / 37.1 МБ & $-5.4\%$ Wall clock \\
+\hline
+\texttt{04\_io\_heavy}: User / Wall / RSS & 0.70 с / 0.95 с / 55.0 МБ & 0.61 с / 0.87 с / 57.2 МБ & $-12.9\%$ CPU, $-8.4\%$ Wall \\
+\hline
+\texttt{Memcheck}: число аллокаций (20k ops) & 18\,669 & 14\,864 & $-3\,805$ ($-20.4\%$) \\
+\hline
+\texttt{Memcheck}: выделено в куче (20k ops) & 1\,102\,761 Б & 1\,022\,690 Б & $-80\,071$ Б ($-7.3\%$) \\
+\hline
+\texttt{gprof} (\texttt{02\_sorted}): \texttt{find} / \texttt{insert} & 360 / 80 нс/вызов & 200 / 40 нс/вызов & ускорение в 1.8--2.0 раза \\
+\hline
+\texttt{gprof} (\texttt{03\_long\_keys}): доля \texttt{find} & 40.0\% (0.12 с) & 25.6\% (0.10 с) & узкое место сместилось в \texttt{main} (46.2\%) \\
+\hline
+\texttt{gprof} (\texttt{04\_io\_heavy}): \texttt{alg::load} & 35.30 мс/вызов & 31.56 мс/вызов & $-10.6\%$ \\
+\hline
+\end{longtable}
+
+Отказ от копирования строк сократил число обращений к аллокатору на \textbf{20.4\%} и ускорил сценарий \texttt{04\_io\_heavy} на \textbf{12.9\%} по процессорному времени. Переход на одиночный \texttt{compare()} снизил время поиска на отсортированном и длинноключевом тестах: в \texttt{03\_long\_keys} основным потребителем времени стала уже обработка ввода в \texttt{main} (46.2\%).
+
+\pagebreak

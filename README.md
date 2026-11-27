@@ -19,6 +19,7 @@
 - Компилятор C++23
 - CMake 3.16+
 - Python 3, `gprof`, `valgrind`, `time` (для бенчмарков и профилирования)
+- `pdflatex` (TeX Live с кириллицей) и `make` (для сборки отчёта)
 
 ### 1. Debug (по умолчанию)
 
@@ -69,6 +70,23 @@ python3 benchmarks/gen_bench.py --out benchmarks/data --ops 500000
 
 ---
 
+## Сборка отчёта
+
+Двойной прогон `make pdf` нужен для корректного обновления ссылок и таблиц `longtable`:
+
+```bash
+cd report
+make pdf && make pdf
+```
+
+Очистка временных файлов после сборки:
+
+```bash
+rm -f report.{aux,log,out}
+```
+
+---
+
 ## Структура проекта
 
 ```text
@@ -76,18 +94,24 @@ alg-lab-rbtree/
 ├── CMakeLists.txt
 ├── README.md
 ├── include/
-│   ├── rb_tree.hpp         # Интерфейс красно-чёрного дерева
-│   └── rb_tree_io.hpp      # Бинарная сериализация
+│   ├── rb_tree.hpp             # Интерфейс красно-чёрного дерева
+│   └── rb_tree_io.hpp          # Бинарная сериализация
 ├── src/
-│   ├── main.cpp            # Обработка команд словаря
-│   ├── rb_tree.cpp         # Реализация RB-Tree
-│   └── rb_tree_io.cpp      # Реализация Save/Load
-├── tests/                  # Наборы для проверки корректности
+│   ├── main.cpp                # Обработка команд словаря
+│   ├── rb_tree.cpp             # Реализация RB-Tree
+│   └── rb_tree_io.cpp          # Реализация Save/Load
+├── tests/                      # Тесты корректности (smoke.in)
 ├── benchmarks/
-│   ├── gen_bench.py        # Генератор тестовых данных
-│   └── run_profile.sh      # Скрипт сборки и профилирования
+│   ├── gen_bench.py            # Генератор тестовых данных
+│   └── run_profile.sh          # Скрипт сборки и профилирования
 └── report/
-    └── raw/                # Сырые отчёты по версиям (v1, v2, ...)
+    ├── Makefile                # Сборка PDF
+    ├── report.tex              # Основной файл отчёта
+    ├── report.pdf              # Собранный отчёт
+    ├── src/                    # Разделы отчёта (.tex)
+    ├── styles/
+    │   └── log-style.sty       # Стилевой файл
+    └── raw/                    # Логи замеров по версиям (v1, v2)
 ```
 
 ---
