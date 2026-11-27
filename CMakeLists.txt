@@ -10,6 +10,8 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type: Debug | Release | RelWithDebInfo" FORCE)
 endif()
 
+option(ENABLE_GPROF "Enable gprof profiling flags (-pg -g)" OFF)
+
 add_library(compiler_warnings INTERFACE)
 target_compile_options(compiler_warnings INTERFACE -Wall -Wextra -Wpedantic -Werror)
 
@@ -22,3 +24,9 @@ target_link_libraries(rb_tree PRIVATE compiler_warnings)
 
 add_executable(dict src/main.cpp)
 target_link_libraries(dict PRIVATE rb_tree compiler_warnings)
+
+if(ENABLE_GPROF)
+    target_compile_options(rb_tree PRIVATE -pg -g)
+    target_compile_options(dict PRIVATE -pg -g)
+    target_link_options(dict PRIVATE -pg)
+endif()
