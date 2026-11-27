@@ -5,6 +5,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <system_error>
+#include <utility>
 #include <vector>
 
 namespace alg {
@@ -143,13 +144,13 @@ void load(RBTree& tree, const std::string& file_path) {
     uint64_t count = read_header(in);
 
     RBTree temp;
-    std::string key;
     uint64_t value = 0;
 
     for (uint64_t i = 0; i < count; ++i) {
+        std::string key;
         read_record(in, key, value);
 
-        if (!temp.insert(key, value)) {
+        if (!temp.insert(std::move(key), value)) {
             throw std::runtime_error("Duplicate key in file");
         }
     }

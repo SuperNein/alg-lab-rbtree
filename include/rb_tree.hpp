@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -15,6 +16,7 @@ public:
     RBTree& operator=(const RBTree&) = delete;
 
     bool insert(const std::string& key, uint64_t value);
+    bool insert(std::string&& key, uint64_t value);
     bool remove(const std::string& key);
     std::optional<uint64_t> find(const std::string& key) const;
 
@@ -59,10 +61,14 @@ private:
 
     void insert_fixup(Node* node) noexcept;
     void delete_fixup(Node* node) noexcept;
-    
+
     void transplant(Node* old_node, Node* new_node) noexcept;
     Node* minimum(Node* subtree_root) const noexcept;
+
     Node* find_node(const std::string& key) const noexcept;
+    bool find_insert_pos(const std::string& key, Node*& parent, bool& insert_left) const noexcept;
+    void attach_node(Node* parent, bool insert_left, Node* node) noexcept;
+
     void destroy_subtree(Node* node) noexcept;
 };
 

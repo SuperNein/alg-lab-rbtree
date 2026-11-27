@@ -41,10 +41,11 @@ void RBTree::destroy_subtree(Node* node) noexcept {
 RBTree::Node* RBTree::find_node(const std::string& key) const noexcept {
     Node* current = root_;
     while (current != &nil_) {
-        if (key == current->key) {
+        int cmp = key.compare(current->key);
+        if (cmp == 0) {
             return current;
         }
-        current = (key < current->key) ? current->left : current->right;
+        current = (cmp < 0) ? current->left : current->right;
     }
     return &nil_;
 }
@@ -101,25 +102,30 @@ void RBTree::right_rotate(Node* pivot) noexcept {
     pivot->parent = child;
 }
 
-bool RBTree::insert(const std::string& key, uint64_t value) {
-    Node* parent = &nil_;
+bool RBTree::find_insert_pos(const std::string& key, Node*& parent, bool& insert_left) const noexcept {
+    parent = &nil_;
     Node* current = root_;
+    insert_left = false;
 
     while (current != &nil_) {
         parent = current;
-        if (key == current->key) {
+        int cmp = key.compare(current->key);
+        if (cmp == 0) {
             return false;
         }
-
-        current = (key < current->key) ? current->left : current->right;
+        insert_left = (cmp < 0);
+        current = insert_left ? current->left : current->right;
     }
 
-    Node* node = new Node(key, value, Color::red);
+    return true;
+}
+
+void RBTree::attach_node(Node* parent, bool insert_left, Node* node) noexcept {
     node->parent = parent;
 
     if (parent == &nil_) {
         root_ = node;
-    } else if (node->key < parent->key) {
+    } else if (insert_left) {
         parent->left = node;
     } else {
         parent->right = node;
@@ -127,7 +133,27 @@ bool RBTree::insert(const std::string& key, uint64_t value) {
 
     insert_fixup(node);
     ++size_;
+}
 
+bool RBTree::insert(const std::string& key, uint64_t value) {
+    Node* parent = &nil_;
+    bool insert_left = false;
+    if (!find_insert_pos(key, parent, insert_left)) {
+        return false;
+    }
+
+    attach_node(parent, insert_left, new Node(key, value, Color::red));
+    return true;
+}
+
+bool RBTree::insert(std::string&& key, uint64_t value) {
+    Node* parent = &nil_;
+    bool insert_left = false;
+    if (!find_insert_pos(key, parent, insert_left)) {
+        return false;
+    }
+
+    attach_node(parent, insert_left, new Node(std::move(key), value, Color::red));
     return true;
 }
 

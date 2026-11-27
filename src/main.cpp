@@ -1,6 +1,7 @@
 #include "rb_tree.hpp"
 #include "rb_tree_io.hpp"
 
+#include <utility>
 #include <cstdint>
 #include <exception>
 #include <iostream>
@@ -26,7 +27,7 @@ void handle_insert(alg::RBTree& tree) {
 
     to_lower(word);
 
-    if (tree.insert(word, value)) {
+    if (tree.insert(std::move(word), value)) {
         std::cout << "OK\n";
     } else {
         std::cout << "Exist\n";
