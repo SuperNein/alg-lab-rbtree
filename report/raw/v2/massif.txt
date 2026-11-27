@@ -1,0 +1,287 @@
+--------------------------------------------------------------------------------
+Command:            ./build-release/dict
+Massif arguments:   --massif-out-file=report/raw/v2/massif.out
+ms_print arguments: report/raw/v2/massif.out
+--------------------------------------------------------------------------------
+
+
+    MB
+17.27^                                                           ##           
+     |                                                           #            
+     |                                                           #            
+     |                                                         ::#            
+     |                                     @                  :: #            
+     |                                    :@                  :: #            
+     |                                    :@                  :: #            
+     |                                  :::@                :::: #            
+     |                                  : :@                : :: #            
+     |                                 :: :@              ::: :: #           :
+     |                                ::: :@           :::: : :: # :::::::::::
+     |               ::               ::: :@    :::::::: :: : :: # ::: :: :: :
+     |               :             :::::: :@::::: :::: : :: : :: # ::: :: :: :
+     |               :       :::::::: ::: :@::: : :::: : :: : :: # ::: :: :: :
+     |              ::    ::::: :: :: ::: :@::: : :::: : :: : :: # ::: :: :: :
+     |          :@:::: ::::: :: :: :: ::: :@::: : :::: : :: : :: # ::: :: :: :
+     |        :@:@: :: :: :: :: :: :: ::: :@::: : :::: : :: : :: # ::: :: :: :
+     |      @@:@:@: :: :: :: :: :: :: ::: :@::: : :::: : :: : :: # ::: :: :: :
+     |    @@@ :@:@: :: :: :: :: :: :: ::: :@::: : :::: : :: : :: # ::: :: :: :
+     |  @:@ @ :@:@: :: :: :: :: :: :: ::: :@::: : :::: : :: : :: # ::: :: :: :
+   0 +----------------------------------------------------------------------->Gi
+     0                                                                   1.511
+
+Number of snapshots: 51
+ Detailed snapshots: [1, 3, 4, 6, 8, 26, 41 (peak)]
+
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+  0              0                0                0             0            0
+  1     46,721,472        1,211,544        1,019,848       191,696            0
+84.18% (1,019,848B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+->57.41% (695,520B) 0x10C8AA: alg::RBTree::insert(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&, unsigned long) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| ->57.41% (695,520B) 0x10AF68: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   
+->10.54% (127,720B) 0x49BF70E: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->10.54% (127,720B) 0x49C104F: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->10.54% (127,720B) 0x492CF41: std::basic_istream<char, std::char_traits<char> >& std::operator>><char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|     ->10.54% (127,658B) 0x10AEFF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|     | 
+|     ->00.01% (62B) in 1+ places, all below ms_print's threshold (01.00%)
+|     
+->08.11% (98,304B) 0x4983A56: std::basic_filebuf<wchar_t, std::char_traits<wchar_t> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->08.11% (98,304B) 0x497FACA: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->02.70% (32,768B) 0x4926C30: std::ios_base::sync_with_stdio(bool) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   | ->02.70% (32,768B) 0x10ACAF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   |   
+|   ->02.70% (32,768B) 0x4926C53: std::ios_base::sync_with_stdio(bool) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   | ->02.70% (32,768B) 0x10ACAF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   |   
+|   ->02.70% (32,768B) 0x4926C76: std::ios_base::sync_with_stdio(bool) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|     ->02.70% (32,768B) 0x10ACAF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|       
+->06.09% (73,728B) 0x490E38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->06.09% (73,728B) 0x400571E: call_init.part.0 (dl-init.c:74)
+|   ->06.09% (73,728B) 0x4005823: call_init (dl-init.c:120)
+|     ->06.09% (73,728B) 0x4005823: _dl_init (dl-init.c:121)
+|       ->06.09% (73,728B) 0x401F58F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+|         
+->02.03% (24,576B) 0x4981BC3: std::basic_filebuf<char, std::char_traits<char> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  ->02.03% (24,576B) 0x497F8CA: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+    ->02.03% (24,576B) in 3 places, all below massif's threshold (1.00%)
+      
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+  2     75,414,041        1,792,632        1,491,209       301,423            0
+  3    105,686,233        2,361,120        1,952,330       408,790            0
+82.69% (1,952,330B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+->62.81% (1,482,984B) 0x10C8AA: alg::RBTree::insert(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&, unsigned long) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| ->62.81% (1,482,984B) 0x10AF68: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   
+->11.55% (272,738B) 0x49BF70E: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->11.55% (272,738B) 0x49C104F: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->11.55% (272,738B) 0x492CF41: std::basic_istream<char, std::char_traits<char> >& std::operator>><char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|     ->11.55% (272,676B) 0x10AEFF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|     | 
+|     ->00.00% (62B) in 1+ places, all below ms_print's threshold (01.00%)
+|     
+->04.16% (98,304B) 0x4983A56: std::basic_filebuf<wchar_t, std::char_traits<wchar_t> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->04.16% (98,304B) 0x497FACA: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->01.39% (32,768B) 0x4926C30: std::ios_base::sync_with_stdio(bool) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   | ->01.39% (32,768B) 0x10ACAF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   |   
+|   ->01.39% (32,768B) 0x4926C53: std::ios_base::sync_with_stdio(bool) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   | ->01.39% (32,768B) 0x10ACAF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   |   
+|   ->01.39% (32,768B) 0x4926C76: std::ios_base::sync_with_stdio(bool) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|     ->01.39% (32,768B) 0x10ACAF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|       
+->03.12% (73,728B) 0x490E38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->03.12% (73,728B) 0x400571E: call_init.part.0 (dl-init.c:74)
+|   ->03.12% (73,728B) 0x4005823: call_init (dl-init.c:120)
+|     ->03.12% (73,728B) 0x4005823: _dl_init (dl-init.c:121)
+|       ->03.12% (73,728B) 0x401F58F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+|         
+->01.04% (24,576B) 0x4981BC3: std::basic_filebuf<char, std::char_traits<char> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+  ->01.04% (24,576B) 0x497F8CA: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+    ->01.04% (24,576B) in 3 places, all below massif's threshold (1.00%)
+      
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+  4    152,593,164        3,160,720        2,600,919       559,801            0
+82.29% (2,600,919B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+->64.24% (2,030,544B) 0x10C8AA: alg::RBTree::insert(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&, unsigned long) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| ->64.24% (2,030,544B) 0x10AF68: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   
+->11.83% (373,767B) 0x49BF70E: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->11.83% (373,767B) 0x49C104F: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->11.83% (373,767B) 0x492CF41: std::basic_istream<char, std::char_traits<char> >& std::operator>><char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|     ->11.82% (373,736B) 0x10AEFF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|     | 
+|     ->00.00% (31B) in 1+ places, all below ms_print's threshold (01.00%)
+|     
+->03.11% (98,304B) 0x4983A56: std::basic_filebuf<wchar_t, std::char_traits<wchar_t> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->03.11% (98,304B) 0x497FACA: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->01.04% (32,768B) 0x4926C30: std::ios_base::sync_with_stdio(bool) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   | ->01.04% (32,768B) 0x10ACAF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   |   
+|   ->01.04% (32,768B) 0x4926C53: std::ios_base::sync_with_stdio(bool) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   | ->01.04% (32,768B) 0x10ACAF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   |   
+|   ->01.04% (32,768B) 0x4926C76: std::ios_base::sync_with_stdio(bool) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|     ->01.04% (32,768B) 0x10ACAF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|       
+->02.33% (73,728B) 0x490E38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->02.33% (73,728B) 0x400571E: call_init.part.0 (dl-init.c:74)
+|   ->02.33% (73,728B) 0x4005823: call_init (dl-init.c:120)
+|     ->02.33% (73,728B) 0x4005823: _dl_init (dl-init.c:121)
+|       ->02.33% (73,728B) 0x401F58F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+|         
+->00.78% (24,576B) in 1+ places, all below ms_print's threshold (01.00%)
+
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+  5    187,029,627        3,702,136        3,040,093       662,043            0
+  6    211,782,123        4,063,072        3,332,936       730,136            0
+82.03% (3,332,936B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+->65.23% (2,650,248B) 0x10C8AA: alg::RBTree::insert(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&, unsigned long) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| ->65.23% (2,650,248B) 0x10AF68: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   
+->11.96% (486,080B) 0x49BF70E: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->11.96% (486,080B) 0x49C104F: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->11.96% (486,080B) 0x492CF41: std::basic_istream<char, std::char_traits<char> >& std::operator>><char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|     ->11.96% (486,049B) 0x10AEFF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|     | 
+|     ->00.00% (31B) in 1+ places, all below ms_print's threshold (01.00%)
+|     
+->02.42% (98,304B) 0x4983A56: std::basic_filebuf<wchar_t, std::char_traits<wchar_t> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->02.42% (98,304B) 0x497FACA: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->02.42% (98,304B) in 3 places, all below massif's threshold (1.00%)
+|     
+->01.81% (73,728B) 0x490E38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->01.81% (73,728B) 0x400571E: call_init.part.0 (dl-init.c:74)
+|   ->01.81% (73,728B) 0x4005823: call_init (dl-init.c:120)
+|     ->01.81% (73,728B) 0x4005823: _dl_init (dl-init.c:121)
+|       ->01.81% (73,728B) 0x401F58F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+|         
+->00.60% (24,576B) in 1+ places, all below ms_print's threshold (01.00%)
+
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+  7    244,778,297        4,532,344        3,713,585       818,759            0
+  8    266,736,121        4,817,080        3,944,542       872,538            0
+81.89% (3,944,542B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+->65.74% (3,166,560B) 0x10C8AA: alg::RBTree::insert(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&, unsigned long) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| ->65.74% (3,166,560B) 0x10AF68: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   
+->12.07% (581,374B) 0x49BF70E: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->12.07% (581,374B) 0x49C104F: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->12.07% (581,374B) 0x492CF41: std::basic_istream<char, std::char_traits<char> >& std::operator>><char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|     ->12.07% (581,343B) 0x10AEFF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|     | 
+|     ->00.00% (31B) in 1+ places, all below ms_print's threshold (01.00%)
+|     
+->02.04% (98,304B) 0x4983A56: std::basic_filebuf<wchar_t, std::char_traits<wchar_t> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->02.04% (98,304B) 0x497FACA: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->02.04% (98,304B) in 3 places, all below massif's threshold (1.00%)
+|     
+->01.53% (73,728B) 0x490E38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->01.53% (73,728B) 0x400571E: call_init.part.0 (dl-init.c:74)
+|   ->01.53% (73,728B) 0x4005823: call_init (dl-init.c:120)
+|     ->01.53% (73,728B) 0x4005823: _dl_init (dl-init.c:121)
+|       ->01.53% (73,728B) 0x401F58F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+|         
+->00.51% (24,576B) in 1+ places, all below ms_print's threshold (01.00%)
+
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+  9    292,445,345        4,840,408        3,965,065       875,343            0
+ 10    316,065,335        6,243,952        5,103,648     1,140,304            0
+ 11    360,356,747        8,611,584        7,024,135     1,587,449            0
+ 12    390,173,904        4,949,656        4,052,104       897,552            0
+ 13    425,046,356        5,369,400        4,392,560       976,840            0
+ 14    455,564,561        5,720,272        4,677,117     1,043,155            0
+ 15    494,797,290        6,138,328        5,016,185     1,122,143            0
+ 16    520,955,445        6,404,168        5,231,806     1,172,362            0
+ 17    547,112,919        6,646,696        5,428,433     1,218,263            0
+ 18    586,352,997        6,991,584        5,708,227     1,283,357            0
+ 19    615,046,964        7,218,080        5,891,901     1,326,179            0
+ 20    658,084,152        7,536,432        6,150,248     1,386,184            0
+ 21    697,145,857        7,545,768        6,159,437     1,386,331            0
+ 22    725,834,026        9,235,688        7,530,191     1,705,497            0
+ 23    747,350,904       10,399,280        8,474,093     1,925,187            0
+ 24    783,211,124       12,273,728        9,994,529     2,279,199            0
+ 25    811,900,584       13,735,008       11,179,803     2,555,205            0
+ 26    834,733,106       14,886,120       12,113,540     2,772,580            0
+81.37% (12,113,540B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+->67.55% (10,055,088B) 0x10C8AA: alg::RBTree::insert(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&, unsigned long) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| ->51.45% (7,658,352B) 0x10DE9D: alg::load(alg::RBTree&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| | ->51.45% (7,658,352B) 0x10B176: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| |   
+| ->16.10% (2,396,736B) 0x10AF68: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   
+->09.49% (1,412,515B) 0x10E061: alg::load(alg::RBTree&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| ->09.49% (1,412,515B) 0x10B176: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   
+->02.96% (440,665B) 0x49BF70E: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->02.96% (440,665B) 0x49C104F: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->02.96% (440,665B) 0x492CF41: std::basic_istream<char, std::char_traits<char> >& std::operator>><char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|     ->02.96% (440,603B) 0x10AEFF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|     | 
+|     ->00.00% (62B) in 1+ places, all below ms_print's threshold (01.00%)
+|     
+->01.38% (205,272B) in 6 places, all below massif's threshold (1.00%)
+  
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+ 27    863,428,062        7,699,680        6,282,696     1,416,984            0
+ 28    884,949,365        7,853,768        6,407,628     1,446,140            0
+ 29    913,648,914        8,043,504        6,561,597     1,481,907            0
+ 30    949,537,726        8,265,464        6,741,767     1,523,697            0
+ 31    994,685,923        8,519,640        6,947,919     1,571,721            0
+ 32  1,018,310,779        8,637,880        7,043,849     1,594,031            0
+ 33  1,041,937,879        8,756,272        7,139,836     1,616,436            0
+ 34  1,077,376,266        8,934,144        7,284,143     1,650,001            0
+ 35  1,112,816,326        9,101,720        7,420,121     1,681,599            0
+ 36  1,170,333,409        9,156,216        7,465,962     1,690,254            0
+ 37  1,193,958,041       10,555,608        8,601,177     1,954,431            0
+ 38  1,229,395,927       12,457,304       10,143,855     2,313,449            0
+ 39  1,276,647,198       14,902,912       12,127,517     2,775,395            0
+ 40  1,300,273,613       16,093,720       13,093,527     3,000,193            0
+ 41  1,340,581,283       18,107,016       14,726,590     3,380,426            0
+81.33% (14,726,590B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+->67.76% (12,269,664B) 0x10C8AA: alg::RBTree::insert(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&, unsigned long) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| ->56.98% (10,317,816B) 0x10DE9D: alg::load(alg::RBTree&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| | ->56.98% (10,317,816B) 0x10B176: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| |   
+| ->10.78% (1,951,848B) 0x10AF68: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   
+->10.47% (1,896,332B) 0x10E061: alg::load(alg::RBTree&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+| ->10.47% (1,896,332B) 0x10B176: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|   
+->01.96% (355,322B) 0x49BF70E: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+| ->01.96% (355,322B) 0x49C104F: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|   ->01.96% (355,322B) 0x492CF41: std::basic_istream<char, std::char_traits<char> >& std::operator>><char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+|     ->01.96% (355,260B) 0x10AEFF: main (in /mnt/d/labs/3_sem/alg/alg-lab-rbtree/build-release/dict)
+|     | 
+|     ->00.00% (62B) in 1+ places, all below ms_print's threshold (01.00%)
+|     
+->01.13% (205,272B) in 6 places, all below massif's threshold (1.00%)
+  
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+ 42  1,387,830,798        9,308,584        7,587,899     1,720,685            0
+ 43  1,411,461,618        9,386,392        7,650,997     1,735,395            0
+ 44  1,435,092,137        9,478,512        7,725,639     1,752,873            0
+ 45  1,482,341,263        9,656,920        7,870,312     1,786,608            0
+ 46  1,505,972,070        9,735,320        7,933,922     1,801,398            0
+ 47  1,541,415,411        9,852,040        8,028,559     1,823,481            0
+ 48  1,565,039,862        9,925,792        8,088,373     1,837,419            0
+ 49  1,600,482,551       10,028,584        8,171,776     1,856,808            0
+ 50  1,622,002,444       10,079,768        8,213,355     1,866,413            0
