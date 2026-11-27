@@ -21,8 +21,8 @@ public:
     void clear() noexcept;
 
     friend void swap(RBTree& lhs, RBTree& rhs) noexcept;
-    friend bool save(const RBTree& tree, const std::string& file_path, std::string& error_msg);
-    friend bool load(RBTree& tree, const std::string& file_path, std::string& error_msg);
+    friend void save(const RBTree& tree, const std::string& file_path);
+    friend void load(RBTree& tree, const std::string& file_path);
 
 private:
     enum class Color : uint8_t {
